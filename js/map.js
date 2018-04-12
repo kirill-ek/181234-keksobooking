@@ -13,6 +13,7 @@ var MIN_WIDTH = 300;
 var MAX_WIDTH = 900;
 var MIN_HEIGHT = 150;
 var MAX_HEIGHT = 500;
+var AD_LIST_LENGTH = 8;
 
 var AD_TYPE_TRANSLATE = {'palace': 'Дворец', 'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'};
 
@@ -50,7 +51,7 @@ var getAvatar = function (imgSrc, index, imgType) {
 
 // выбор случайного значения из массива
 var getRandomIndex = function (arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[getRandomNumber(0, arr.length)];
 };
 
 // создание html-элемента
@@ -64,26 +65,25 @@ var makeElement = function (tagName, className) {
 var getFeatures = function (arr) {
   var sliceBegin = getRandomNumber(0, arr.length);
   var sliceEnd = getRandomNumber(0, arr.length + 1);
-  var adFeatures = arr.slice(sliceBegin, sliceEnd);
 
   if (sliceBegin === sliceEnd) {
-    adFeatures = arr.slice(sliceBegin, (sliceEnd + 1));
+    sliceEnd++;
   } else if (sliceBegin > sliceEnd) {
-    adFeatures = arr.slice(sliceEnd, sliceBegin);
+    sliceEnd += sliceBegin;
   }
-  return adFeatures;
+
+  return arr.slice(sliceBegin, sliceEnd);
 };
 
 // создание перечня объявлений
 var createAdList = function () {
   var adList = [];
-  adList.length = 8;
 
   // создание объектов - карточек объявлений
-  for (var i = 0; i < adList.length; i++) {
+  for (var i = 0; i < AD_LIST_LENGTH; i++) {
     // нахождение местоположения
     var coordinates = {x: getRandomNumber(MIN_WIDTH, MAX_WIDTH), y: getRandomNumber(MIN_HEIGHT, MAX_HEIGHT)};
-    adList[i] =
+    var adListItem =
       {
         author: {
           avatar: getAvatar('img/avatars/user', i, 'png'),
@@ -106,7 +106,9 @@ var createAdList = function () {
           y: coordinates.y
         }
       };
+    adList.push(adListItem);
   }
+
   return adList;
 };
 
