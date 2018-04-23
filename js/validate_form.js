@@ -37,18 +37,23 @@ var checkType = function () {
   var MIN_PRICE_HOUSE = 5000;
   var MIN_PRICE_PALACE = 10000;
 
-  if (selectType.value === 'bungalo') {
-    inputPrice.min = MIN_PRICE_BUNGALO;
-    inputPrice.placeholder = MIN_PRICE_BUNGALO;
-  } else if (selectType.value === 'flat') {
-    inputPrice.min = MIN_PRICE_FLAT;
-    inputPrice.placeholder = MIN_PRICE_FLAT;
-  } else if (selectType.value === 'house') {
-    inputPrice.min = MIN_PRICE_HOUSE;
-    inputPrice.placeholder = MIN_PRICE_HOUSE;
-  } else if (selectType.value === 'palace') {
-    inputPrice.min = MIN_PRICE_PALACE;
-    inputPrice.placeholder = MIN_PRICE_PALACE;
+  switch (selectType.value) {
+    case 'bungalo':
+      inputPrice.min = MIN_PRICE_BUNGALO;
+      inputPrice.placeholder = MIN_PRICE_BUNGALO;
+      break;
+    case 'flat':
+      inputPrice.min = MIN_PRICE_HOUSE;
+      inputPrice.placeholder = MIN_PRICE_HOUSE;
+      break;
+    case 'house':
+      inputPrice.min = MIN_PRICE_FLAT;
+      inputPrice.placeholder = MIN_PRICE_FLAT;
+      break;
+    case 'palace':
+      inputPrice.min = MIN_PRICE_PALACE;
+      inputPrice.placeholder = MIN_PRICE_PALACE;
+      break;
   }
 };
 
@@ -93,11 +98,15 @@ var desactivateActiveFields = function () {
   selectTimeOut.value = '12:00';
 };
 
-selectRooms.addEventListener('change', checkRooms);
-selectCapacity.addEventListener('change', checkRooms);
-selectType.addEventListener('change', checkType);
-selectTimeIn.addEventListener('change', checkTime);
-selectTimeOut.addEventListener('change', checkTime);
+var selectChangeHandler = function () {
+  selectRooms.addEventListener('change', checkRooms);
+  selectCapacity.addEventListener('change', checkRooms);
+  selectType.addEventListener('change', checkType);
+  selectTimeIn.addEventListener('change', checkTime);
+  selectTimeOut.addEventListener('change', checkTime);
+};
+
+selectChangeHandler();
 
 adFormSubmit.addEventListener('click', function () {
   for (var i = 0; i < adInputs.length; i++) {
