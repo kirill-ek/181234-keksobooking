@@ -231,27 +231,25 @@ var createAdCardElement = function (ad) {
 
 // отключение активных полей
 var desactivateActiveFields = function () {
+  var mapPinMainHeight = parseInt(mapPinMainStyle.height, 10);
+
   for (var i = 0; i < fields.length; i++) {
     fields[i].setAttribute('disabled', 'disabled');
   }
 
   address.setAttribute('disabled', 'disabled');
-  address.value = parseInt(mapPinMainStyle.left, 10) + ', ' + parseInt(mapPinMainStyle.top, 10);
+  address.value = Math.floor(parseInt(mapPinMainStyle.left, 10)) + ', ' +
+    Math.floor(parseInt(mapPinMainStyle.top, 10) + mapPinMainHeight / 2);
 
   map.classList.remove('map--faded');
   document.querySelector('.ad-form').classList.remove('ad-form__disabled');
 };
 
 var activateMapPinMain = function () {
-  var mapPinMainHeight = parseInt(mapPinMainStyle.height, 10);
-  var mapPinMainCoordX = parseInt(mapPinMainStyle.left, 10);
-  var mapPinMainCoordY = parseInt(mapPinMainStyle.top, 10) + mapPinMainHeight / 2;
-
   for (var j = 0; j < fields.length; j++) {
     fields[j].removeAttribute('disabled');
   }
 
-  address.value = mapPinMainCoordX + ', ' + mapPinMainCoordY;
   createPins(adCards);
 
   map.insertBefore(createAdCardElement(adCards[0]), map.querySelector('.map__filters-container'));
