@@ -83,7 +83,7 @@
     selectTimeIn.value = '12:00';
     selectTimeOut.value = '12:00';
 
-    window.mapDesactivateActiveFields();
+    window.desactivateMap();
   };
 
   var selectChangeHandler = function () {

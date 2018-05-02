@@ -2,75 +2,41 @@
 
 (function () {
   var map = document.querySelector('.map');
-  var template = document.querySelector('template');
-  var mapPinMain = document.querySelector('.map__pin--main');
-  var mapPinMainStyle = getComputedStyle(mapPinMain);
-  var mapPinTemplate = template.content.querySelector('.map__pin');
-  var ENTER_KEYCODE = 13;
+  var mapPinMain = map.querySelector('.map__pin--main');
 
-  // отключение активных полей
-  var desactivateActiveFields = function () {
+  var activateFields = function () {
     var fields = document.querySelectorAll('fieldset');
-    var address = document.querySelector('#address');
-    var mapPinMainHeight = parseInt(mapPinMainStyle.height, 10);
-    document.querySelector('article.map__card');
 
     for (var i = 0; i < fields.length; i++) {
-      fields[i].setAttribute('disabled', 'disabled');
+      fields[i].removeAttribute('disabled');
     }
 
-    address.setAttribute('disabled', 'disabled');
-    address.value = Math.floor(parseInt(mapPinMainStyle.left, 10)) + ', ' +
-      Math.floor(parseInt(mapPinMainStyle.top, 10) + mapPinMainHeight / 2);
-
+    document.querySelector('.ad-form').classList.remove('ad-form--disabled');
     map.classList.remove('map--faded');
-
-    if (document.querySelector('article.map__card')) {
-      document.querySelector('article.map__card').classList.add('hidden');
-    }
   };
 
-  // создаем метки
-  var createPinElement = function (ad, i) {
-    var MAP_PIN_WIDTH = 50;
-    var MAP_PIN_HEIGHT = 70;
-    var pinElement = mapPinTemplate.cloneNode(true);
+  var activateMap = function () {
+    var mapFiltersContainer = map.querySelector('.map__filters-container');
+    var adCards = [];
 
-    pinElement.style.left = ad.location.x + MAP_PIN_WIDTH / 2 + 'px';
-    pinElement.style.top = ad.location.y + MAP_PIN_HEIGHT + 'px';
-    pinElement.setAttribute('data-index', i);
+    var onLoad = function (data) {
+      adCards = data;
 
-    var pinAvatar = pinElement.querySelector('img');
-    pinAvatar.src = ad.author.avatar;
-    pinAvatar.alt = ad.offer.title;
-
-    var openPinElement = function (evt) {
-      var adCards = window.dataCreateAdList();
-      var target = evt.currentTarget;
-      var index = target.dataset.index;
-
-      window.cardCreateAdCardElement(adCards[index]);
+      window.pinCreatePins(adCards);
+      map.insertBefore(window.cardCreateAdCardElement(adCards[0]), mapFiltersContainer);
     };
-
-    var pinElementClickHandler = function (evt) {
-      openPinElement(evt);
-    };
-
-    var pinElementKeydownHandler = function (evt) {
-      if (evt.keyCode === ENTER_KEYCODE) {
-        openPinElement(evt);
-      }
-    };
-
-    pinElement.addEventListener('click', pinElementClickHandler);
-    pinElement.addEventListener('keydown', pinElementKeydownHandler);
-
-    return pinElement;
+    window.backend.load(onLoad);
   };
 
-  desactivateActiveFields();
+  var mainPinMouseupHandler = function (evt) {
+    evt.preventDefault();
 
-  window.mapDesactivateActiveFields = desactivateActiveFields;
-  window.mapCreatePinElement = createPinElement;
+    activateMap();
+    activateFields();
+
+    mapPinMain.removeEventListener('mouseup', mainPinMouseupHandler);
+  };
+
+  mapPinMain.addEventListener('mouseup', mainPinMouseupHandler);
 })();
 
