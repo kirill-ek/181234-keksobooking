@@ -37,12 +37,12 @@
         inputPrice.placeholder = MIN_PRICE_BUNGALO;
         break;
       case 'flat':
-        inputPrice.min = MIN_PRICE_HOUSE;
-        inputPrice.placeholder = MIN_PRICE_HOUSE;
-        break;
-      case 'house':
         inputPrice.min = MIN_PRICE_FLAT;
         inputPrice.placeholder = MIN_PRICE_FLAT;
+        break;
+      case 'house':
+        inputPrice.min = MIN_PRICE_HOUSE;
+        inputPrice.placeholder = MIN_PRICE_HOUSE;
         break;
       case 'palace':
         inputPrice.min = MIN_PRICE_PALACE;
@@ -84,8 +84,7 @@
     selectRooms.addEventListener('change', checkRooms);
     selectCapacity.addEventListener('change', checkRooms);
     selectType.addEventListener('change', checkType);
-    selectTimeIn.addEventListener('change', checkTime);
-    selectTimeOut.addEventListener('change', checkTime);
+    checkTime();
   };
 
   var loadHandler = function () {

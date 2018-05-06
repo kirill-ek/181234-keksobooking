@@ -26,31 +26,20 @@
     return pinElement;
   };
 
-  var shuffleArray = function (adArr) {
-    for (var i = adArr.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var num = adArr[i];
-
-      adArr[i] = adArr[j];
-      adArr[j] = num;
-    }
-    return adArr;
-  };
-
   // функция, которая создает пины на карте
-  var createPins = function (ad) {
+  var createPins = function (ads) {
     var fragment = document.createDocumentFragment();
     var mapPins = document.querySelector('.map__pins');
     var AD_COUNT = 5;
-    var adToShow = ad.slice();
+    var adsToShow = ads.slice();
 
-    if (adToShow.length > AD_COUNT) {
-      shuffleArray(adToShow);
-      adToShow.splice(5);
+    if (adsToShow.length > AD_COUNT) {
+      window.util.shuffleArray(adsToShow);
+      adsToShow.splice(5);
     }
 
-    for (var i = 0; i < adToShow.length; i++) {
-      fragment.appendChild(createPinElement(ad[i], i));
+    for (var i = 0; i < adsToShow.length; i++) {
+      fragment.appendChild(createPinElement(ads[i], i));
     }
 
     mapPins.appendChild(fragment);

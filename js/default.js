@@ -2,6 +2,7 @@
 
 (function () {
   var mapPinMain = document.querySelector('.map__pin--main');
+  var DEC = 10;
 
   var desactivatePins = function () {
     var mapPins = document.querySelector('.map__pins');
@@ -28,8 +29,8 @@
       fields[i].setAttribute('disabled', 'disabled');
     }
 
-    address.value = Math.floor(parseInt(mapPinMainStyle.left, 10)) + ', ' +
-      Math.floor(parseInt(mapPinMainStyle.top, 10));
+    address.value = Math.floor(parseInt(mapPinMainStyle.left, DEC)) + ', ' +
+      Math.floor(parseInt(mapPinMainStyle.top, DEC));
   };
 
   var desactivateMap = function () {

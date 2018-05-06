@@ -2,11 +2,12 @@
 
 (function () {
   var mapPinMain = document.querySelector('.map').querySelector('.map__pin--main');
+  var DEC = 10;
 
   var mapPinMainMousedownHandler = function (evt) {
     var mapPinMainStyle = getComputedStyle(mapPinMain);
-    var mapPinMainHeight = parseInt(mapPinMainStyle.height, 10) / 2;
-    var mapPinMainWidth = parseInt(mapPinMainStyle.width, 10);
+    var mapPinMainHeight = parseInt(mapPinMainStyle.height, DEC) / 2;
+    var mapPinMainWidth = parseInt(mapPinMainStyle.width, DEC);
     var address = document.querySelector('#address');
 
     evt.preventDefault();
@@ -18,13 +19,13 @@
 
     var mapPinMainMousemoveHandler = function (moveEvt) {
       var mapOverlay = document.querySelector('.map__overlay');
-      var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMainHeight);
-      var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, 10));
+      var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, DEC) + mapPinMainHeight);
+      var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, DEC));
 
       var TOP_BORDER = 150;
       var LEFT_BORDER = 0;
       var BOTTOM_BORDER = 500;
-      var rightBorder = parseInt(getComputedStyle(mapOverlay).width, 10) - mapPinMainWidth;
+      var rightBorder = parseInt(getComputedStyle(mapOverlay).width, DEC) - mapPinMainWidth;
 
       address.value = mapPinMainLeft + ', ' + mapPinMainTop;
       moveEvt.preventDefault();
@@ -58,16 +59,16 @@
     var mapPinMainMouseupHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMainHeight);
-      var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, 10));
+      var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, DEC) + mapPinMainHeight);
+      var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, DEC));
       address.value = mapPinMainLeft + ', ' + mapPinMainTop;
 
       document.removeEventListener('mousemove', mapPinMainMousemoveHandler);
       document.removeEventListener('mouseup', mapPinMainMouseupHandler);
     };
 
-    var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMainHeight);
-    var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, 10));
+    var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, DEC) + mapPinMainHeight);
+    var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, DEC));
     address.value = mapPinMainLeft + ', ' + mapPinMainTop;
 
     document.addEventListener('mousemove', mapPinMainMousemoveHandler);
