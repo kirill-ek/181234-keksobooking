@@ -3,6 +3,7 @@
 (function () {
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
+  var adCards = [];
 
   var activateFields = function () {
     var fields = document.querySelectorAll('fieldset');
@@ -15,17 +16,28 @@
     map.classList.remove('map--faded');
   };
 
-  var activateMap = function () {
+  var loadHandler = function (data) {
     var mapFiltersContainer = map.querySelector('.map__filters-container');
-    var adCards = [];
+    adCards = data;
 
-    var onLoad = function (data) {
-      adCards = data;
+    var adCard = window.cardCreateAdCardElement(adCards[0]);
+    adCard.classList.add('hidden');
 
-      window.pinCreatePins(adCards);
-      map.insertBefore(window.cardCreateAdCardElement(adCards[0]), mapFiltersContainer);
+    window.pinCreatePins(data);
+
+    map.insertBefore(adCard, mapFiltersContainer);
+
+    window.map = {
+      adCardsArr: data
     };
-    window.backend.load(onLoad);
+  };
+
+  var errorHandler = function (errorMessage) {
+    window.createErrorMessage(errorMessage);
+  };
+
+  var activateMap = function () {
+    window.backend.load(loadHandler, errorHandler);
   };
 
   var mainPinMouseupHandler = function (evt) {
@@ -38,5 +50,7 @@
   };
 
   mapPinMain.addEventListener('mouseup', mainPinMouseupHandler);
+
+  window.mapMainPinMouseUpHandler = mainPinMouseupHandler;
 })();
 

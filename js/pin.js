@@ -18,27 +18,41 @@
     var mapPinTemplate = document.querySelector('template').content.querySelector('.map__pin');
     var pinElement = mapPinTemplate.cloneNode(true);
 
-    var openPinElement = function (evt) {
-      var target = evt.currentTarget;
-      var index = target.dataset.index;
-
-      window.cardCreateAdCardElement(ad[index]);
-    };
-
-    window.util.elementHandler(pinElement, openPinElement);
+    window.util.elementHandler(pinElement, function () {
+      window.cardCreateAdCardElement(ad);
+    });
     setPinStyle(pinElement, ad, i);
 
     return pinElement;
+  };
+
+  var shuffleArray = function (adArr) {
+    for (var i = adArr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var num = adArr[i];
+
+      adArr[i] = adArr[j];
+      adArr[j] = num;
+    }
+    return adArr;
   };
 
   // функция, которая создает пины на карте
   var createPins = function (ad) {
     var fragment = document.createDocumentFragment();
     var mapPins = document.querySelector('.map__pins');
+    var AD_COUNT = 5;
+    var adToShow = ad.slice();
 
-    for (var i = 0; i < ad.length; i++) {
+    if (adToShow.length > AD_COUNT) {
+      shuffleArray(adToShow);
+      adToShow.splice(5);
+    }
+
+    for (var i = 0; i < adToShow.length; i++) {
       fragment.appendChild(createPinElement(ad[i], i));
     }
+
     mapPins.appendChild(fragment);
   };
 

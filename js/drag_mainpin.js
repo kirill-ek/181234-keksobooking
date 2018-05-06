@@ -16,18 +16,17 @@
       y: evt.clientY
     };
 
-    var onMouseMove = function (moveEvt) {
-      var mapFiltersContainer = document.querySelector('.map').querySelector('.map__filters-container');
+    var mapPinMainMousemoveHandler = function (moveEvt) {
       var mapOverlay = document.querySelector('.map__overlay');
       var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMainHeight);
       var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, 10));
-      address.value = mapPinMainLeft + ', ' + mapPinMainTop;
-      var TOP_BORDER = 0;
-      var LEFT_BORDER = 0;
-      var rightBorder = parseInt(getComputedStyle(mapOverlay).width, 10) - mapPinMainWidth;
-      var bottomBorder = parseInt(getComputedStyle(mapOverlay).height, 10) -
-        parseInt(getComputedStyle(mapFiltersContainer).height, 10);
 
+      var TOP_BORDER = 150;
+      var LEFT_BORDER = 0;
+      var BOTTOM_BORDER = 500;
+      var rightBorder = parseInt(getComputedStyle(mapOverlay).width, 10) - mapPinMainWidth;
+
+      address.value = mapPinMainLeft + ', ' + mapPinMainTop;
       moveEvt.preventDefault();
 
       var shift = {
@@ -43,29 +42,36 @@
       mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
       mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
 
-      if (mapPinMainLeft <= LEFT_BORDER || mapPinMainLeft >= rightBorder ||
-        (mapPinMainTop - mapPinMainHeight) <= TOP_BORDER || mapPinMainTop >= bottomBorder) {
-        document.removeEventListener('mousemove', onMouseMove);
+      if ((mapPinMainTop - mapPinMainHeight) <= TOP_BORDER) {
+        mapPinMain.style.top = (TOP_BORDER + mapPinMainHeight) + 'px';
+      } else if (mapPinMainTop >= BOTTOM_BORDER) {
+        mapPinMain.style.top = BOTTOM_BORDER - mapPinMainHeight + 'px';
+      }
+
+      if (mapPinMainLeft <= LEFT_BORDER) {
+        mapPinMain.style.left = LEFT_BORDER + mapPinMainWidth / 2 + 'px';
+      } else if (mapPinMainLeft >= rightBorder) {
+        mapPinMain.style.left = rightBorder - mapPinMainWidth / 2 + 'px';
       }
     };
 
-    var onMouseUp = function (upEvt) {
+    var mapPinMainMouseupHandler = function (upEvt) {
       upEvt.preventDefault();
 
       var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMainHeight);
       var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, 10));
       address.value = mapPinMainLeft + ', ' + mapPinMainTop;
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', mapPinMainMousemoveHandler);
+      document.removeEventListener('mouseup', mapPinMainMouseupHandler);
     };
 
     var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, 10) + mapPinMainHeight);
     var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, 10));
     address.value = mapPinMainLeft + ', ' + mapPinMainTop;
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', mapPinMainMousemoveHandler);
+    document.addEventListener('mouseup', mapPinMainMouseupHandler);
   };
 
   mapPinMain.addEventListener('mousedown', mapPinMainMousedownHandler);
