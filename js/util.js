@@ -13,6 +13,17 @@
       return adCardContent;
     },
 
+    shuffleArray: function (adArr) {
+      for (var i = adArr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var num = adArr[i];
+
+        adArr[i] = adArr[j];
+        adArr[j] = num;
+      }
+      return adArr;
+    },
+
     elementHandler: function (element, action, docEsc) {
       var elementClickHandler = function (evt) {
         action(evt);
