@@ -14,16 +14,18 @@
     MIDDLE: 50000
   };
 
+  var DEC = 10;
+
   var filterType = function (typeValue, ad) {
     if (typeValue === 'any') {
       return ad;
     }
 
-    if (isNaN(parseInt(typeValue, 10))) {
+    if (isNaN(parseInt(typeValue, DEC))) {
       return ad === typeValue;
-    } else {
-      return ad === parseInt(typeValue, 10);
     }
+
+    return ad === parseInt(typeValue, 10);
   };
 
   var filterHouseRooms = function (ad) {
@@ -47,7 +49,7 @@
       case 'high':
         return ad.offer.price >= Price.MIDDLE;
       default:
-        return ad;
+        return true;
     }
   };
 

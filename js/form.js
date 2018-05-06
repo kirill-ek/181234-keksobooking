@@ -85,8 +85,6 @@
     selectCapacity.addEventListener('change', checkRooms);
     selectType.addEventListener('change', checkType);
     checkTime();
-    // selectTimeIn.addEventListener('change', checkTime);
-    // selectTimeOut.addEventListener('change', checkTime);
   };
 
   var loadHandler = function () {
