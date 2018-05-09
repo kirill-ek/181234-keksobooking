@@ -1,13 +1,20 @@
 'use strict';
 
 (function () {
-  var mapPinMain = document.querySelector('.map').querySelector('.map__pin--main');
-  var DEC = 10;
+  var HALF = 1 / 2;
+
+  var Border = {
+    TOP: 150,
+    LEFT: 0,
+    BOTTOM: 500
+  };
+
+  var mapPinMain = window.util.elements.map.querySelector('.map__pin--main');
 
   var mapPinMainMousedownHandler = function (evt) {
     var mapPinMainStyle = getComputedStyle(mapPinMain);
-    var mapPinMainHeight = parseInt(mapPinMainStyle.height, DEC) / 2;
-    var mapPinMainWidth = parseInt(mapPinMainStyle.width, DEC);
+    var mapPinMainHeight = parseInt(mapPinMainStyle.height, window.util.DEC);
+    var mapPinMainWidth = parseInt(mapPinMainStyle.width, window.util.DEC) * HALF;
     var address = document.querySelector('#address');
 
     evt.preventDefault();
@@ -19,13 +26,9 @@
 
     var mapPinMainMousemoveHandler = function (moveEvt) {
       var mapOverlay = document.querySelector('.map__overlay');
-      var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, DEC) + mapPinMainHeight);
-      var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, DEC));
-
-      var TOP_BORDER = 150;
-      var LEFT_BORDER = 0;
-      var BOTTOM_BORDER = 500;
-      var rightBorder = parseInt(getComputedStyle(mapOverlay).width, DEC) - mapPinMainWidth;
+      var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, window.util.DEC));
+      var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, window.util.DEC));
+      var rightBorder = parseInt(getComputedStyle(mapOverlay).width, window.util.DEC) - mapPinMainWidth;
 
       address.value = mapPinMainLeft + ', ' + mapPinMainTop;
       moveEvt.preventDefault();
@@ -43,32 +46,32 @@
       mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
       mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
 
-      if ((mapPinMainTop - mapPinMainHeight) <= TOP_BORDER) {
-        mapPinMain.style.top = (TOP_BORDER + mapPinMainHeight) + 'px';
-      } else if (mapPinMainTop >= BOTTOM_BORDER) {
-        mapPinMain.style.top = BOTTOM_BORDER - mapPinMainHeight + 'px';
+      if (mapPinMainTop <= Border.TOP) {
+        mapPinMain.style.top = Border.TOP + mapPinMainHeight + 'px';
+      } else if (mapPinMainTop >= Border.BOTTOM) {
+        mapPinMain.style.top = (Border.BOTTOM - mapPinMainHeight) + 'px';
       }
 
-      if (mapPinMainLeft <= LEFT_BORDER) {
-        mapPinMain.style.left = LEFT_BORDER + mapPinMainWidth / 2 + 'px';
+      if (mapPinMainLeft <= Border.LEFT) {
+        mapPinMain.style.left = Border.LEFT + mapPinMainWidth + 'px';
       } else if (mapPinMainLeft >= rightBorder) {
-        mapPinMain.style.left = rightBorder - mapPinMainWidth / 2 + 'px';
+        mapPinMain.style.left = (rightBorder - mapPinMainWidth) + 'px';
       }
     };
 
     var mapPinMainMouseupHandler = function (upEvt) {
       upEvt.preventDefault();
 
-      var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, DEC) + mapPinMainHeight);
-      var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, DEC));
+      var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, window.util.DEC) + mapPinMainHeight);
+      var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, window.util.DEC));
       address.value = mapPinMainLeft + ', ' + mapPinMainTop;
 
       document.removeEventListener('mousemove', mapPinMainMousemoveHandler);
       document.removeEventListener('mouseup', mapPinMainMouseupHandler);
     };
 
-    var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, DEC) + mapPinMainHeight);
-    var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, DEC));
+    var mapPinMainTop = Math.floor(parseInt(mapPinMain.style.top, window.util.DEC) + mapPinMainHeight);
+    var mapPinMainLeft = Math.floor(parseInt(mapPinMain.style.left, window.util.DEC));
     address.value = mapPinMainLeft + ', ' + mapPinMainTop;
 
     document.addEventListener('mousemove', mapPinMainMousemoveHandler);

@@ -2,21 +2,30 @@
 
 (function () {
   var createErrorMessage = function (errorMessage) {
-    var message = document.createElement('div');
     var TIME_OUT = 3000;
+    var COLOR_RED = 'rgba(255, 0, 0, 0.8)';
+
+    var StyleValue = {
+      Z_INDEX: 100,
+      PADDING_VALUE: 20,
+      TOP: 20,
+      FONT_SIZE: 30
+    };
+
+    var message = document.createElement('div');
 
     message.style =
-      'z-index: 100; ' +
-      'margin: 0 auto; ' +
-      'padding: 20px; ' +
+      'z-index: ' + StyleValue.Z_INDEX +
+      'margin: ' + window.util.NULL_VALUE + ' auto; ' +
+      'padding: ' + StyleValue.PADDING_VALUE + 'px; ' +
       'text-align: center; ' +
-      'background-color: rgba(255, 0, 0, 0.8); ' +
+      'background-color: ' + COLOR_RED +
       'color: white';
     message.style.position = 'absolute';
-    message.style.left = '0';
-    message.style.right = '0';
-    message.style.top = '20%';
-    message.style.fontSize = '30px';
+    message.style.left = '' + window.util.NULL_VALUE;
+    message.style.right = '' + window.util.NULL_VALUE;
+    message.style.top = StyleValue.TOP + '%';
+    message.style.fontSize = StyleValue.FONT_SIZE + 'px';
     message.textContent = errorMessage;
 
     setTimeout(function () {
@@ -26,5 +35,7 @@
     document.body.insertAdjacentElement('afterbegin', message);
   };
 
-  window.createErrorMessage = createErrorMessage;
+  window.error = {
+    createErrorMessage: createErrorMessage
+  };
 })();

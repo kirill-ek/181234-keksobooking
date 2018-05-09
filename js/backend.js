@@ -8,13 +8,13 @@
 
   var RequestStatus = {
     OK: 200,
-    TIMEOUT: 10000
+    TIME_OUT: 10000
   };
 
   var getXhr = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-    xhr.timeout = RequestStatus.TIMEOUT;
+    xhr.timeout = RequestStatus.TIME_OUT;
 
     xhr.addEventListener('load', function () {
       if (xhr.status === RequestStatus.OK) {

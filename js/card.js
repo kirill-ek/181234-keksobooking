@@ -1,7 +1,13 @@
 'use strict';
 
 (function () {
-  var AD_TYPE = {'palace': 'Дворец', 'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'};
+  var adType = {
+    'palace': 'Дворец',
+    'flat': 'Квартира',
+    'house': 'Дом',
+    'bungalo': 'Бунгало'
+  };
+
   var mapCardTemplate = document.querySelector('template').content.querySelector('.map__card');
   var adCard = mapCardTemplate.cloneNode(true);
   var adClose = adCard.querySelector('.popup__close');
@@ -48,7 +54,7 @@
     window.util.fillAdCardElement(adCard, '.popup__title', ad.offer.title);
     window.util.fillAdCardElement(adCard, '.popup__text--address', ad.offer.address);
     window.util.fillAdCardElement(adCard, '.popup__text--price', ad.offer.price + '₽/ночь');
-    window.util.fillAdCardElement(adCard, '.popup__type', AD_TYPE[ad.offer.type]);
+    window.util.fillAdCardElement(adCard, '.popup__type', adType[ad.offer.type]);
     window.util.fillAdCardElement(adCard, '.popup__text--capacity', ad.offer.rooms + ' комнаты для '
       + ad.offer.guests + ' гостей');
     window.util.fillAdCardElement(adCard, '.popup__text--time', 'Заезд после ' + ad.offer.checkin +
@@ -64,5 +70,7 @@
     return adCard;
   };
 
-  window.cardCreateAdCardElement = createAdCardElement;
+  window.card = {
+    createAdCardElement: createAdCardElement
+  };
 })();

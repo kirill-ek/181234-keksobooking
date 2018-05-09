@@ -1,24 +1,41 @@
 'use strict';
 
 (function () {
-  var adForm = document.querySelector('.ad-form');
-  var adFormReset = adForm.querySelector('.ad-form__reset');
-  var inputPrice = adForm.querySelector('#price');
-  var selectType = adForm.querySelector('#type');
-  var selectTimeIn = adForm.querySelector('#timein');
-  var selectTimeOut = adForm.querySelector('#timeout');
-  var selectRooms = adForm.querySelector('#room_number');
-  var selectCapacity = adForm.querySelector('#capacity');
+  var TIME_OUT = 2000;
+  var SELECT_TIME_DEFAULT = '12:00';
+
+  var SelectValue = {
+    DEFAULT: '1',
+    TWO: '2',
+    THREE: '3',
+    HUNDRED: '100'
+  };
+
+  var MinPrice = {
+    BUNGALO: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PALACE: 10000
+  };
+
+  var adFormReset = window.util.elements.adForm.querySelector('.ad-form__reset');
+  var inputPrice = window.util.elements.adForm.querySelector('#price');
+  var selectType = window.util.elements.adForm.querySelector('#type');
+  var selectTimeIn = window.util.elements.adForm.querySelector('#timein');
+  var selectTimeOut = window.util.elements.adForm.querySelector('#timeout');
+  var selectRooms = window.util.elements.adForm.querySelector('#room_number');
+  var selectCapacity = window.util.elements.adForm.querySelector('#capacity');
 
   var checkRooms = function () {
-    if (selectRooms.value === '1' && selectCapacity.value !== '1') {
+    if (selectRooms.value === SelectValue.DEFAULT && selectCapacity.value !== SelectValue.DEFAULT) {
       selectCapacity.setCustomValidity('Максимальная вместимость - не более 1 человека');
-    } else if (selectRooms.value === '2' && (selectCapacity.value !== '1' && selectCapacity.value !== '2')) {
+    } else if (selectRooms.value === SelectValue.TWO && (selectCapacity.value !== SelectValue.DEFAULT
+        && selectCapacity.value !== SelectValue.TWO)) {
       selectCapacity.setCustomValidity('Максимальная вместимость - не более 2-х человек');
-    } else if (selectRooms.value === '3'
-      && (selectCapacity.value !== '1' && selectCapacity.value !== '2' && selectCapacity.value !== '3')) {
+    } else if (selectRooms.value === SelectValue.THREE && (selectCapacity.value !== SelectValue.DEFAULT
+        && selectCapacity.value !== SelectValue.TWO && selectCapacity.value !== SelectValue.THREE)) {
       selectCapacity.setCustomValidity('Максимальная вместимость - не более 3-х человек');
-    } else if (selectRooms.value === '100' && selectCapacity.value !== '0') {
+    } else if (selectRooms.value === SelectValue.HUNDRED && selectCapacity.value !== window.util.NULL_VALUE) {
       selectCapacity.setCustomValidity('100 комнат - не для гостей');
     } else {
       selectCapacity.setCustomValidity('');
@@ -26,27 +43,22 @@
   };
 
   var checkType = function () {
-    var MIN_PRICE_BUNGALO = 0;
-    var MIN_PRICE_FLAT = 1000;
-    var MIN_PRICE_HOUSE = 5000;
-    var MIN_PRICE_PALACE = 10000;
-
     switch (selectType.value) {
       case 'bungalo':
-        inputPrice.min = MIN_PRICE_BUNGALO;
-        inputPrice.placeholder = MIN_PRICE_BUNGALO;
+        inputPrice.min = MinPrice.BUNGALO;
+        inputPrice.placeholder = MinPrice.BUNGALO;
         break;
       case 'flat':
-        inputPrice.min = MIN_PRICE_FLAT;
-        inputPrice.placeholder = MIN_PRICE_FLAT;
+        inputPrice.min = MinPrice.FLAT;
+        inputPrice.placeholder = MinPrice.FLAT;
         break;
       case 'house':
-        inputPrice.min = MIN_PRICE_HOUSE;
-        inputPrice.placeholder = MIN_PRICE_HOUSE;
+        inputPrice.min = MinPrice.HOUSE;
+        inputPrice.placeholder = MinPrice.HOUSE;
         break;
       case 'palace':
-        inputPrice.min = MIN_PRICE_PALACE;
-        inputPrice.placeholder = MIN_PRICE_PALACE;
+        inputPrice.min = MinPrice.PALACE;
+        inputPrice.placeholder = MinPrice.PALACE;
         break;
     }
   };
@@ -62,19 +74,23 @@
   };
 
   var setDefaultSettings = function () {
-    var inputTitle = adForm.querySelector('#title');
-    var inputDescription = adForm.querySelector('#description');
-    var preview = document.querySelector('.ad-form-header__preview img');
+    var inputTitle = window.util.elements.adForm.querySelector('#title');
+    var inputDescription = window.util.elements.adForm.querySelector('#description');
+    var photos = window.photo.previewPhotoContainer.querySelectorAll('img');
 
     inputTitle.value = '';
     inputDescription.value = '';
-    selectRooms.value = '1';
-    selectCapacity.value = '1';
+    selectRooms.value = SelectValue.DEFAULT;
+    selectCapacity.value = SelectValue.DEFAULT;
     selectType.value = 'flat';
-    inputPrice.value = '1000';
-    selectTimeIn.value = '12:00';
-    selectTimeOut.value = '12:00';
-    preview.src = 'img/muffin-grey.svg';
+    inputPrice.value = MinPrice.FLAT;
+    selectTimeIn.value = SELECT_TIME_DEFAULT;
+    selectTimeOut.value = SELECT_TIME_DEFAULT;
+    window.photo.previewAvatar.src = 'img/muffin-grey.svg';
+
+    photos.forEach(function (photo) {
+      photo.remove();
+    });
 
     window.default.desactivateMap();
     window.default.desactivateFields();
@@ -89,7 +105,6 @@
 
   var loadHandler = function () {
     var successMessage = document.querySelector('.success');
-    var TIME_OUT = 2000;
 
     successMessage.classList.remove('hidden');
 
@@ -101,13 +116,13 @@
   };
 
   var errorHandler = function (errorMessage) {
-    window.createErrorMessage(errorMessage);
+    window.error.createErrorMessage(errorMessage);
   };
 
-  adForm.addEventListener('submit', function (evt) {
+  window.util.elements.adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
-    var data = new FormData(adForm);
+    var data = new FormData(window.util.elements.adForm);
     window.backend.save(data, loadHandler, errorHandler);
   });
 
@@ -115,5 +130,6 @@
     evt.preventDefault();
     setDefaultSettings();
   });
+
   selectChangeHandler();
 })();
